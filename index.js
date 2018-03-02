@@ -65,7 +65,7 @@ export default class ApmAgent {
  * @param {number} __transactionsPerRequest - The number of transactions collected before sending to server (default: 1).
  */
   constructor({
-    name = '', serverUrl: __serverUrl, transactionsPerRequest: __transactionsPerRequest = 1,
+    name = 'custom-agent', serverUrl: __serverUrl, transactionsPerRequest: __transactionsPerRequest = 1,
   }) {
     if (!__serverUrl) throw new Error("'__serverUrl' is required.");
     if (!Number(__transactionsPerRequest)) throw new Error(`'__transactionsPerRequest' must be a a number, instead got a(n) ${typeof __transactionsPerRequest} (value: ${__transactionsPerRequest}).`);
