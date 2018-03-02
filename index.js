@@ -57,13 +57,6 @@ class Transaction {
 }
 
 export default class ApmAgent {
-/**
- * Represents an apm-agent.
- * @constructor
- * @param {string} name - The name of the client that will appear to the APM server
- * @param {string} __serverUrl - The url to which the logs will be sent.
- * @param {number} __transactionsPerRequest - The number of transactions collected before sending to server (default: 1).
- */
   constructor({
     name = 'unknown', serverUrl: __serverUrl, transactionsPerRequest: __transactionsPerRequest = 1,
   }) {
