@@ -24,7 +24,7 @@ const apm = new APM({
 
 Set user context:
 ```
-apm.setUserContext({ userId: app.get('userId') }); NOTE: Always set this on login and on logout.
+apm.setUserContext({ userId: app.get('userId') }); // NOTE: Always set this on login and on logout.
 ```
 Set tag context:
 ```
