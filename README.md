@@ -16,7 +16,7 @@ import APM from 'apm-agent';
 const { APM_SERVER_URL, APM_TRANSACTIONS_COUNT_PER_REQUEST, VERSION } = process.env;
 
 const apm = new APM({
-  name: 'custom-agent',
+  name: 'sme/admin-web',
   serverUrl: APM_SERVER_URL,
   transactionsPerRequest: APM_TRANSACTIONS_COUNT_PER_REQUEST, // default: 1
 });
@@ -34,4 +34,10 @@ apm.setTagContext({ versionNumber: VERSION.number });
 Set custom context:
 ```
 apm.setCustomContext({ repo: 'sme/admin-web' });
+```
+
+
+With Feathers Hooks:
+```
+
 ```
