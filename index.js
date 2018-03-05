@@ -49,7 +49,7 @@ class Transaction {
         pendingTransactions[__id] = [...data.transactions, ...pendingTransactions[__id]];
         if (reportError) {
           const newError = new Error(`Could not send transaction(s) to APM server. ${err.message}`);
-          newError.debug = [...pendingTransactions];
+          newError.debug = [...pendingTransactions[_id]];
           reportError(newError);
         }
       });
