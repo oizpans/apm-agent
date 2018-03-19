@@ -1,11 +1,11 @@
 ## Installation
 SSH:
 ```
-npm install git+ssh://git@gitlab.snapzio.com:van/apm-agent#c24e39ca12aa978b7986163db82511cf310f035d
+npm install git+ssh://git@gitlab.snapzio.com:van/apm-agent#90cc63739e96443bbc0f8aa19edaa3d9f86b1098
 ```
 HTTP:
 ```
-npm install git+http://gitlab.snapzio.com/van/apm-agent#c24e39ca12aa978b7986163db82511cf310f035d
+npm install git+http://gitlab.snapzio.com/van/apm-agent#90cc63739e96443bbc0f8aa19edaa3d9f86b1098
 ```
 
 ## Usage
