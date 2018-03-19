@@ -38,7 +38,7 @@ class Transaction {
     }
 
     const data = {
-      app: this.app,
+      service: this.app,
       transactions: pendingTransactions[__id].map((t) => { delete t.app; return t; }),
     };
 
