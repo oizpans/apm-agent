@@ -10,12 +10,14 @@ class Transaction {
     this.app = app;
     this.__helpers = __helpers;
 
-    this.context = Object.assign({}, context, {
-      custom: Object.assign({
-        url: window.location.href,
-        userAgent: window.navigator && window.navigator.userAgent,
-      }, context.custom),
-    });
+    if (typeof window !== 'undefined' && window) {
+      this.context = Object.assign({}, context, {
+        custom: Object.assign({
+          url: window.location.href,
+          userAgent: window.navigator && window.navigator.userAgent,
+        }, context.custom),
+      });
+    }
 
     this.id = uuid();
     this.__start = new Date();
