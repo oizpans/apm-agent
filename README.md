@@ -1,17 +1,17 @@
 ## Installation
 SSH:
 ```
-npm install git+ssh://git@gitlab.snapzio.com:van/apm-agent#90cc63739e96443bbc0f8aa19edaa3d9f86b1098
+npm install git+ssh://git@gitlab.snapzio.com:van/apm-agent#33a076fa784ca621effb088337144fd1d47e22fc
 ```
 HTTP:
 ```
-npm install git+http://gitlab.snapzio.com/van/apm-agent#90cc63739e96443bbc0f8aa19edaa3d9f86b1098
+npm install git+http://gitlab.snapzio.com/van/apm-agent#33a076fa784ca621effb088337144fd1d47e22fc
 ```
 
 ## Usage
 Initialize apm-agent instance:
 ```
-import APM from 'apm-agent';
+const APM require('apm-agent');
 
 const { APM_SERVER_URL, APM_TRANSACTIONS_COUNT_PER_REQUEST, VERSION } = process.env;
 
