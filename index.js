@@ -56,7 +56,7 @@ class Transaction {
   }
 }
 
-export default class ApmAgent {
+module.exports = class ApmAgent {
   constructor({
     name = 'unknown', serverUrl: __serverUrl, transactionsPerRequest: __transactionsPerRequest = 1,
   }) {
