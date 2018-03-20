@@ -11,7 +11,7 @@ npm install git+http://gitlab.snapzio.com/van/apm-agent#33a076fa784ca621effb0883
 ## Usage
 Initialize apm-agent instance:
 ```
-const APM require('apm-agent');
+const APM = require('apm-agent');
 
 const { APM_SERVER_URL, APM_TRANSACTIONS_COUNT_PER_REQUEST, VERSION } = process.env;
 
