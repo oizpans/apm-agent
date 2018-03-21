@@ -11,8 +11,8 @@ class Transaction {
     this.__helpers = __helpers;
 
     this.context = Object.assign({}, context);
-    
-    if (typeof window !== 'undefined' && window) {
+
+    if (typeof window !== 'undefined' && window && window.navigator && window.location) {
       this.context = Object.assign({}, context, {
         custom: Object.assign({
           url: window.location.href,
