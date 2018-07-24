@@ -3,6 +3,8 @@ const uuid = require('uuidv4');
 
 const pendingTransactions = {};
 
+
+
 class Transaction {
   constructor(name, type, app, __helpers, context) {
     this.name = name;
@@ -23,6 +25,23 @@ class Transaction {
 
     this.id = uuid();
     this.__start = new Date();
+  }
+
+  /*
+    todo : Fix duplicate methods setUserContext, setTagContext, setCustomContext
+    possible new class? interface? ....
+   */
+
+  setUserContext(userContext) {
+    this.context.user = Object.assign({}, this.context.user, userContext);
+  }
+
+  setTagContext(tagsContext) {
+    this.context.tags = Object.assign({}, this.context.tags, tagsContext);
+  }
+
+  setCustomContext(customContext) {
+    this.context.custom = Object.assign({}, this.context.custom, customContext);
   }
 
   end(result, reportError) {
@@ -94,6 +113,11 @@ module.exports = class ApmAgent {
       custom: {},
     };
   }
+
+  /*
+    todo : Fix duplicate methods setUserContext, setTagContext, setCustomContext
+    possible new class? interface? ....
+   */
 
   setUserContext(userContext) {
     this.context.user = Object.assign({}, this.context.user, userContext);
