@@ -3,8 +3,6 @@ const uuid = require('uuidv4');
 
 const pendingTransactions = {};
 
-
-
 class Transaction {
   constructor(name, type, app, __helpers, context) {
     this.name = name;
