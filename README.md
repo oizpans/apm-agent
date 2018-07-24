@@ -67,5 +67,7 @@ app.hooks({
 #### Note
 The parameters for the ``transaction.end()`` are both optional. You can pass the result of the transaction on the first parameter (string), and the error logger (function) on the second.
 ```
+transaction.end('loaded');
+transaction.end(null, reportError);
 transaction.end('loaded', reportError);
 ```
