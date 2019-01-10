@@ -4,16 +4,16 @@ const uuid = require('uuidv4');
 const pendingTransactions = {};
 
 class Transaction {
-  constructor(name, type, app, __helpers, context) {
+  constructor(name, type, app, helpers, context) {
     this.name = name;
     this.type = type;
     this.app = app;
-    this.__helpers = __helpers;
+    this.helpers = helpers;
 
     this.context = Object.assign({}, context);
 
     this.id = uuid();
-    this.__start = new Date();
+    this.start = new Date();
   }
 
   /*
@@ -37,31 +37,35 @@ class Transaction {
     this.result = result || this.name;
     this.timestamp = (new Date()).toISOString();
 
-    this.duration = new Date() - this.__start;
-    const { __id, __serverUrl, __transactionsPerRequest } = this.__helpers;
+    this.duration = new Date() - this.start;
+    const { _id, serverUrl, transactionsPerRequest, transactionSampleRate } = this.helpers;
 
-    delete this.__start;
-    delete this.__helpers;
+    if (Math.random() > transactionSampleRate) {
+      return;
+    }
 
-    pendingTransactions[__id].push(this);
+    delete this.start;
+    delete this.helpers;
 
-    if (pendingTransactions[__id].length < __transactionsPerRequest) {
+    pendingTransactions[_id].push(this);
+
+    if (pendingTransactions[_id].length < transactionsPerRequest) {
       return;
     }
 
     const data = {
       service: this.app,
-      transactions: pendingTransactions[__id].map((t) => { delete t.app; return t; }),
+      transactions: pendingTransactions[_id].map((t) => { delete t.app; return t; }),
     };
 
-    pendingTransactions[__id].length = 0;
+    pendingTransactions[_id].length = 0;
 
-    axios.post(__serverUrl, data, { headers: { 'Content-Type': 'application/json' } })
+    axios.post(serverUrl, data, { headers: { 'Content-Type': 'application/json' } })
       .catch((err) => {
-        pendingTransactions[__id] = [...data.transactions, ...pendingTransactions[__id]];
+        pendingTransactions[_id] = [...data.transactions, ...pendingTransactions[_id]];
         if (reportError) {
           const newError = new Error(`Could not send transaction(s) to APM server. ${err.message}`);
-          newError.debug = [...pendingTransactions[__id]];
+          newError.debug = [...pendingTransactions[_id]];
           reportError(newError);
         }
       });
@@ -70,18 +74,36 @@ class Transaction {
 
 module.exports = class ApmAgent {
   constructor({
-    name = 'unknown', serverUrl: __serverUrl, transactionsPerRequest: __transactionsPerRequest = 1,
+    name = 'unknown',
+    serverUrl,
+    transactionsPerRequest = 1,
+    transactionSampleRate = 1.0,
   }) {
-    if (!__serverUrl) throw new Error("'__serverUrl' is required.");
-    if (!Number(__transactionsPerRequest)) throw new Error(`'__transactionsPerRequest' must be a a number, instead got a(n) ${typeof __transactionsPerRequest} (value: ${__transactionsPerRequest}).`);
+    if (!serverUrl) {
+      throw new Error("'serverUrl' is required.");
+    }
 
-    const __id = uuid();
-    pendingTransactions[__id] = [];
+    if (isNaN(transactionsPerRequest)) {
+      throw new Error(`'transactionsPerRequest' must be a a number, instead got a(n) ${typeof transactionsPerRequest} (value: ${transactionsPerRequest}).`);
+    }
 
-    this.__helpers = {
-      __transactionsPerRequest,
-      __serverUrl: `${__serverUrl}/v1/client-side/transactions`,
-      __id,
+    if (isNaN(transactionSampleRate)) {
+      throw new Error(`'transactionSampleRate' must be a a number, instead got a(n) ${typeof transactionSampleRate} (value: ${transactionSampleRate}).`);
+    }
+
+    if (transactionsPerRequest < 0) {
+      throw new Error("'transactionsPerRequest' must be greater than zero.");
+    }
+
+
+    const _id = uuid();
+    pendingTransactions[_id] = [];
+
+    this.helpers = {
+      serverUrl: `${serverUrl}/v1/client-side/transactions`,
+      transactionsPerRequest,
+      transactionSampleRate,
+      _id,
     };
 
     this.app = {
@@ -106,7 +128,7 @@ module.exports = class ApmAgent {
   /*
     todo : Fix duplicate methods setUserContext, setTagContext, setCustomContext
     possible new class? interface? ....
-   */
+  */
 
   setUserContext(userContext) {
     this.context.user = Object.assign({}, this.context.user, userContext);
@@ -121,6 +143,6 @@ module.exports = class ApmAgent {
   }
 
   startTransaction(name, type) {
-    return new Transaction(name, type, this.app, this.__helpers, this.context);
+    return new Transaction(name, type, this.app, this.helpers, this.context);
   }
 }
