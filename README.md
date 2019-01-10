@@ -13,12 +13,18 @@ Initialize apm-agent instance:
 ```
 const APM = require('apm-agent');
 
-const { APM_SERVER_URL, APM_TRANSACTIONS_COUNT_PER_REQUEST, VERSION } = process.env;
+const {
+  APM_SERVER_URL,
+  APM_TRANSACTIONS_COUNT_PER_REQUEST,
+  APM_TRANSACTION_SAMPLE_RATE,
+  VERSION,
+} = process.env;
 
 const apm = new APM({
   name: 'sme/admin-web',
   serverUrl: APM_SERVER_URL,
   transactionsPerRequest: APM_TRANSACTIONS_COUNT_PER_REQUEST, // default: 1
+  transactionSampleRate: APM_TRANSACTION_SAMPLE_RATE, // Any number between 0 to 1, default: 1.0 (100%)
 });
 ```
 
