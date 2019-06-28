@@ -100,7 +100,7 @@ module.exports = class ApmAgent {
     pendingTransactions[_id] = [];
 
     this.helpers = {
-      serverUrl: `${serverUrl}/intake/v2/rum/events`,
+      serverUrl: `${serverUrl}/intake/v2/events`,
       transactionsPerRequest,
       transactionSampleRate,
       _id,
