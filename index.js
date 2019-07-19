@@ -1,6 +1,10 @@
 const axios = require('axios');
 const uuid = require('uuidv4');
 
+const utils = require('./utils');
+
+const { createMetaData } = utils;
+
 const pendingTransactions = {};
 
 class Transaction {
@@ -38,7 +42,7 @@ class Transaction {
     this.timestamp = (new Date()).toISOString();
 
     this.duration = new Date() - this.start;
-    const { _id, serverUrl, transactionsPerRequest, transactionSampleRate } = this.helpers;
+    const { _id, serverUrl, serviceVersion, transactionsPerRequest, transactionSampleRate } = this.helpers;
 
     if (Math.random() > transactionSampleRate) {
       return;
@@ -52,6 +56,10 @@ class Transaction {
     if (pendingTransactions[_id].length < transactionsPerRequest) {
       return;
     }
+
+    const meta = createMetaData({ name: this.name, version: serviceVersion });
+
+    console.log('service', meta);
 
     const data = {
       service: this.app,
@@ -76,6 +84,7 @@ module.exports = class ApmAgent {
   constructor({
     name = 'unknown',
     serverUrl,
+    serviceVersion,
     transactionsPerRequest = 1,
     transactionSampleRate = 1.0,
   }) {
@@ -104,6 +113,7 @@ module.exports = class ApmAgent {
       transactionsPerRequest,
       transactionSampleRate,
       _id,
+      serviceVersion,
     };
 
     this.app = {
