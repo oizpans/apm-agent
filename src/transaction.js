@@ -30,7 +30,8 @@ module.exports = class Transaction {
         },
         "duration": new Date() - this.start,
         "result": result || this.name,
-        "type": this.type
+        "type": this.type,
+        "context": this.context
       }
     };
   }
