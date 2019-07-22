@@ -50,14 +50,14 @@ module.exports = class Transaction {
 
   end(result, reportError) {
     const trans = this._createTransaction(result);
-    const ndjsonTrans = NDJSON.stringify(trans);
+    const ndjsonTrans = [NDJSON.stringify(trans)];
     const ndjsonMeta = NDJSON.stringify(this.meta);
 
+    ndjsonTrans.unshift(ndjsonMeta);
+
+    const payload = ndjsonTrans.join('');
+
     const { serverUrl } = this.helpers;
-
-    const payload = `${ndjsonMeta}${ndjsonTrans}`;
-
-    console.log(payload);
 
     axios.post(serverUrl, payload, { headers: { 'Content-Type': 'application/x-ndjson' } })
       .catch((error) => {
