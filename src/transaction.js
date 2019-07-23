@@ -1,5 +1,6 @@
 const axios = require('axios');
 const uuid = require('uuidv4');
+const fetch = require('node-fetch');
 
 const Utils = require('./utils');
 
@@ -59,15 +60,35 @@ module.exports = class Transaction {
 
     const { serverUrl } = this.helpers;
 
-    axios.post(serverUrl, payload, { headers: { 'Content-Type': 'application/x-ndjson' } })
-      .catch((error) => {
-        console.log(error);
-        if (reportError) {
-          const newError = new Error(`Could not send transaction(s) to APM server. ${err.message}`);
-          newError.debug = payload;
-          reportError(newError);
-        }
-      });
+    // axios.post(serverUrl, payload, {
+    //   headers: {
+    //     'Accept': 'application/json'
+    //     'Content-Type': 'application/x-ndjson',
+    //   } 
+    // })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     if (reportError) {
+    //       const newError = new Error(`Could not send transaction(s) to APM server. ${err.message}`);
+    //       newError.debug = payload;
+    //       reportError(newError);
+    //     }
+    //   });
+
+    fetch(serverUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-ndjson',
+      },
+      body: payload,
+    })
+    .then(res => res && res.text())
+    .then(json => {
+      console.log('2nd then ==========================================', json);
+    })
+    .catch((error) => {
+      console.log('ERROR ==========================================', error);
+    });
 
   }
 };
